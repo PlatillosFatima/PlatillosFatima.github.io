@@ -17,6 +17,8 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
     })
     .then(res => res.json())
     .then(data => {
+        console.log("Respuesta:", data); // 🔥 DEBUG
+
         if (data.success) {
             mensaje.innerText = "✓ Acceso correcto";
             mensaje.className = "mensaje success";
