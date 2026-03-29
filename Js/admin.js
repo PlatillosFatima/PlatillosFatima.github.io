@@ -1,6 +1,6 @@
 // Cargar pedidos
 function cargarPedidos() {
-    fetch("http://localhost:5000/pedidos")
+    fetch("https://backend-ep0u.onrender.com/login")
     .then(res => res.json())
     .then(data => {
         const tabla = document.querySelector("#tablaPedidos tbody");
