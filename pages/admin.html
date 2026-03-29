@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Pedidos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="admin-body">
+
+    <header>
+        <h1>📊 Panel de Pedidos</h1>
+        <p>Gestiona todos tus pedidos en un solo lugar</p>
+    </header>
+
+    <main class="admin-main">
+        <div class="admin-container">
+            <!-- SECCIÓN DE TABLA -->
+            <section class="admin-section">
+                <h2>📋 Pedidos Realizados</h2>
+                <div class="table-wrapper">
+                    <table class="table-modern" id="tablaPedidos">
+                        <thead>
+                            <tr>
+                                <th>🆔 ID</th>
+                                <th>👤 Nombre</th>
+                                <th>🏠 Dirección</th>
+                                <th>🍰 Menú</th>
+                                <th>📦 Cantidad</th>
+                                <th>⚡ Estado</th>
+                                <th>⚙️ Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- SECCIÓN DE LÍMITE -->
+            <section class="admin-section">
+                <h3>⚙️ Configuración</h3>
+                <div class="limit-box">
+                    <p>Establece el límite máximo de pedidos simultáneos</p>
+                    <div class="limit-form">
+                        <input type="number" id="limite" placeholder="Ej: 10" min="1" class="input-limite">
+                        <button onclick="guardarLimite()" class="btn-limite">Guardar límite</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BOTÓN SALIR -->
+            <div class="button-group">
+                <a href="../index.html">
+                    <button class="btn-secondary" style="width: 100%;">← Volver al inicio</button>
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="../js/admin.js"></script>
+
+</body>
+</html>
