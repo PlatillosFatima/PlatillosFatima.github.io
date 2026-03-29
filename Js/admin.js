@@ -1,4 +1,5 @@
 const API_URL = "https://backend-ep0u.onrender.com";
+
 // Guardar límite
 function guardarLimite() {
     const limite = document.getElementById("limite").value;
@@ -8,7 +9,7 @@ function guardarLimite() {
         return;
     }
 
-    fetch("https://backend-ep0u.onrender.com/limite", {
+    fetch(`${API_URL}/limite`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -27,7 +28,8 @@ function guardarLimite() {
     })
     .catch(error => console.error(error));
 }
-// 🔹 Cargar pedidos
+
+// Cargar pedidos
 function cargarPedidos() {
     fetch(`${API_URL}/pedidos`)
     .then(res => res.json())
@@ -63,7 +65,7 @@ function cargarPedidos() {
         } else {
             tabla.innerHTML = '<tr><td colspan="7">No hay pedidos</td></tr>';
         }
-        
+
         // Actualizar contador de pedidos
         actualizarContadorPedidos();
     })
@@ -72,13 +74,58 @@ function cargarPedidos() {
     });
 }
 
-// 🔹 Actualizar contador de pedidos
+// Cambiar estado de pedido
+function cambiarEstado(idPedido, estado) {
+    if (!estado) {
+        alert("Selecciona un estado válido");
+        return;
+    }
+
+    fetch(`${API_URL}/pedidos/${idPedido}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ estado })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert("Estado actualizado");
+        } else {
+            alert("Error al actualizar estado");
+        }
+    })
+    .catch(error => console.error(error));
+}
+
+// Confirmar eliminar pedido
+function confirmarEliminar(idPedido) {
+    const confirmar = confirm("¿Estás seguro de que deseas eliminar este pedido?");
+    if (confirmar) {
+        fetch(`${API_URL}/pedidos/${idPedido}`, {
+            method: "DELETE"
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert("Pedido eliminado");
+                cargarPedidos(); // Recargar la lista de pedidos después de eliminar
+            } else {
+                alert("Error al eliminar pedido");
+            }
+        })
+        .catch(error => console.error(error));
+    }
+}
+
+// Actualizar contador de pedidos
 function actualizarContadorPedidos() {
     fetch(`${API_URL}/pedidos/count`)
     .then(res => res.json())
     .then(data => {
         console.log(`Total de pedidos: ${data.total}/${data.limite}`);
-        
+
         let contador = document.getElementById("contador-pedidos");
         if (!contador) {
             contador = document.createElement("div");
@@ -89,10 +136,10 @@ function actualizarContadorPedidos() {
                 section.insertBefore(contador, section.firstChild);
             }
         }
-        
+
         let porcentaje = (data.total / data.limite) * 100;
         let color = porcentaje < 50 ? "#10b981" : porcentaje < 80 ? "#f59e0b" : "#ef4444";
-        
+
         contador.innerHTML = `
             <div style="margin-bottom: 15px;">
                 <p style="margin-bottom: 8px; font-weight: 600;">📊 Total de Pedidos</p>
