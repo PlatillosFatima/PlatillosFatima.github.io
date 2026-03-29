@@ -2,9 +2,9 @@ document.getElementById("pedidoForm").addEventListener("submit", function(e) {
     e.preventDefault();
 
     const datos = {
-        nombre_cliente: document.getElementById("nombre").value,
+        nombre: document.getElementById("nombre").value,
         direccion: document.getElementById("direccion").value,
-        numero_menu: document.getElementById("menu").value,
+        menu: document.getElementById("menu").value,
         cantidad: document.getElementById("cantidad").value
     };
 
@@ -13,14 +13,13 @@ document.getElementById("pedidoForm").addEventListener("submit", function(e) {
     mensajeElement.innerText = "";
     mensajeElement.className = "mensaje";
 
-    // Validación
-    if (!datos.nombre_cliente || !datos.direccion || !datos.numero_menu || !datos.cantidad) {
-        mensajeElement.innerText = "❌ Por favor completa todos los campos";
+    if (!datos.nombre || !datos.direccion || !datos.menu || !datos.cantidad) {
+        mensajeElement.innerText = "❌ Completa todos los campos";
         mensajeElement.className = "mensaje error";
         return;
     }
 
-    fetch("https://backend-ep0u.onrender.com/pedidos", {
+    fetch("https://backend-ep0u.onrender.com/pedido", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -30,17 +29,17 @@ document.getElementById("pedidoForm").addEventListener("submit", function(e) {
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            mensajeElement.innerText = "✓ ¡Pedido guardado exitosamente!";
+            mensajeElement.innerText = "✓ Pedido enviado";
             mensajeElement.className = "mensaje success";
             document.getElementById("pedidoForm").reset();
         } else {
-            mensajeElement.innerText = "❌ " + (data.mensaje || "No se pudo enviar el pedido");
+            mensajeElement.innerText = "❌ " + (data.error || "Error");
             mensajeElement.className = "mensaje error";
         }
     })
     .catch(error => {
         console.error(error);
-        mensajeElement.innerText = "⚠️ Error de conexión con el servidor";
+        mensajeElement.innerText = "⚠️ Error de conexión";
         mensajeElement.className = "mensaje error";
     });
 });
