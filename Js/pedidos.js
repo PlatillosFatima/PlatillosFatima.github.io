@@ -21,7 +21,7 @@ document.getElementById("pedidoForm").addEventListener("submit", function(e) {
         return;
     }
 
-    fetch("http://localhost:5000/pedido", {
+    fetch("https://backend-ep0u.onrender.com/login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
