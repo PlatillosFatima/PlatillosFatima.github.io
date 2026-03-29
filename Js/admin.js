@@ -1,5 +1,32 @@
 const API_URL = "https://backend-ep0u.onrender.com";
+// Guardar límite
+function guardarLimite() {
+    const limite = document.getElementById("limite").value;
 
+    if (!limite) {
+        alert("Ingresa un límite válido");
+        return;
+    }
+
+    fetch("https://backend-ep0u.onrender.com/limite", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            limite: parseInt(limite)
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert("Límite guardado");
+        } else {
+            alert("Error al guardar límite");
+        }
+    })
+    .catch(error => console.error(error));
+}
 // 🔹 Cargar pedidos
 function cargarPedidos() {
     fetch(`${API_URL}/pedidos`)
