@@ -1,9 +1,5 @@
 const API_URL = "https://backend-ep0u.onrender.com";
 
-// 🔥 ABRIR IMAGEN (USA URL REAL)
-function abrirImagen(url) {
-    window.open(url, "_blank");
-}
 
 // 🔹 GUARDAR LIMITE
 function guardarLimite() {
@@ -28,6 +24,7 @@ function guardarLimite() {
     });
 }
 
+
 // 🔹 CARGAR PEDIDOS
 function cargarPedidos() {
     fetch(`${API_URL}/pedidos`)
@@ -37,21 +34,23 @@ function cargarPedidos() {
         tabla.innerHTML = "";
 
         if (data.success && data.pedidos.length > 0) {
+
             data.pedidos.forEach(p => {
 
-                let imagenHtml = '<td>';
+                let imagenHtml = "<td>";
 
+                // 🔥 SOLO USA URL
                 if (p.imagen_casa && p.imagen_casa !== '---') {
                     imagenHtml += `
-                    <a href="${p.imagen_casa}" target="_blank">
-                        📷Ver imagen
-                    </a>
-                `;
+                        <a href="${p.imagen_casa}" target="_blank">
+                            📷 Ver imagen
+                        </a>
+                    `;
                 } else {
-                    imagenHtml += '---';
+                    imagenHtml += "---";
                 }
 
-                imagenHtml += '</td>';
+                imagenHtml += "</td>";
 
                 const fila = `
                     <tr>
@@ -79,13 +78,16 @@ function cargarPedidos() {
 
                 tabla.innerHTML += fila;
             });
+
         } else {
             tabla.innerHTML = '<tr><td colspan="10">No hay pedidos</td></tr>';
         }
 
         actualizarContadorPedidos();
-    });
+    })
+    .catch(err => console.error("Error:", err));
 }
+
 
 // 🔹 CAMBIAR ESTADO
 function cambiarEstado(idPedido, estado) {
@@ -105,6 +107,7 @@ function cambiarEstado(idPedido, estado) {
     });
 }
 
+
 // 🔹 ELIMINAR
 function confirmarEliminar(idPedido) {
     if (!confirm("¿Eliminar pedido?")) return;
@@ -120,6 +123,7 @@ function confirmarEliminar(idPedido) {
         }
     });
 }
+
 
 // 🔹 ELIMINAR TODOS
 function eliminarTodosPedidos() {
@@ -137,18 +141,20 @@ function eliminarTodosPedidos() {
     });
 }
 
-// 🔹 CONTADOR
+
+// 🔹 CONTADOR (DISEÑO ORIGINAL)
 function actualizarContadorPedidos() {
     fetch(`${API_URL}/pedidos/count`)
     .then(res => res.json())
     .then(data => {
+
         let contador = document.getElementById("contador-pedidos-container");
-        
+
         let porcentaje = (data.total / data.limite) * 100;
         let faltan = data.limite - data.total;
 
-        let color = porcentaje < 50 ? "#10b981" : 
-                    porcentaje < 80 ? "#f59e0b" : 
+        let color = porcentaje < 50 ? "#10b981" :
+                    porcentaje < 80 ? "#f59e0b" :
                     "#ef4444";
 
         contador.innerHTML = `
@@ -172,6 +178,7 @@ function actualizarContadorPedidos() {
         `;
     });
 }
+
 
 // 🔹 INICIAL
 cargarPedidos();
