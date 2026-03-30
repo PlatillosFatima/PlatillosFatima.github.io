@@ -39,6 +39,22 @@
                     <input type="number" id="cantidad" placeholder="¿Cuántas unidades?" min="1" required>
                 </div>
 
+                <div class="form-group">
+                    <label for="numcelular">📱 Número de celular</label>
+                    <input type="tel" id="numcelular" placeholder="Ej: +58 412 1234567" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="descripcion_adicional">📝 Mensaje adicional</label>
+                    <textarea id="descripcion_adicional" placeholder="Déjanos un mensaje para tu pedido..." rows="3" style="resize: vertical;"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="imagen_casa">📸 Foto de referencia (opcional)</label>
+                    <input type="file" id="imagen_casa" accept="image/*" placeholder="Sube una foto">
+                    <small style="color: #666; display: block; margin-top: 5px;">Formatos: JPG, PNG, GIF (máx 5MB)</small>
+                </div>
+
                 <button type="submit" class="btn-submit">Enviar Pedido</button>
             </form>
 

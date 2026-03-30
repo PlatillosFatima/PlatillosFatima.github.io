@@ -31,6 +31,9 @@
                                 <th>🏠 Dirección</th>
                                 <th>🍰 Menú</th>
                                 <th>📦 Cantidad</th>
+                                <th>📱 Celular</th>
+                                <th>📝 Mensaje</th>
+                                <th>📸 Foto</th>
                                 <th>⚡ Estado</th>
                                 <th>⚙️ Acciones</th>
                             </tr>
@@ -50,6 +53,11 @@
                         <input type="number" id="limite" class="input-limite" placeholder="Ej: 10">
                         <button onclick="guardarLimite()" class="btn-limite">Guardar límite</button>
                     </div>
+                </div>
+                
+                <div class="limit-box" style="margin-top: 20px; border-color: #ef4444; background-color: #fef2f2;">
+                    <p style="color: #991b1b; font-weight: 600;">⚠️ Zona de Peligro</p>
+                    <button onclick="eliminarTodosPedidos()" class="btn-delete-all" style="width: 100%; margin-top: 10px;">🗑️ Eliminar TODOS los pedidos</button>
                 </div>
             </section>
 

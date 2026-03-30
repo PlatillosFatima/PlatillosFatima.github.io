@@ -666,7 +666,28 @@ footer p {
     display: inline-block;
     border: 1px solid #ffeeba;
 }
+/* Botón Eliminar Todos */
+.btn-delete-all {
+    background-color: #ef4444;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
 
+.btn-delete-all:hover {
+    background-color: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+.btn-delete-all:active {
+    transform: translateY(0);
+}
 .estado-entregado {
     background-color: #d1e7dd;
     color: #0f5132;

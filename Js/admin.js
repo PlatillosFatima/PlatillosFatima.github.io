@@ -39,6 +39,15 @@ function cargarPedidos() {
 
         if (data.success && Array.isArray(data.pedidos) && data.pedidos.length > 0) {
             data.pedidos.forEach(p => {
+                // Generar columna de foto
+                let fotoHtml = '<td>';
+                if (p.imagen_casa) {
+                    fotoHtml += `<button onclick="verFoto('${p.imagen_casa}')" class="btn-ver-foto" style="background: none; border: none; cursor: pointer; font-size: 1.2rem;">📸 Ver</button>`;
+                } else {
+                    fotoHtml += '---';
+                }
+                fotoHtml += '</td>';
+
                 const fila = `
                     <tr>
                         <td>${p.id_pedido}</td>
@@ -46,6 +55,9 @@ function cargarPedidos() {
                         <td>${p.direccion}</td>
                         <td>${p.menu}</td>
                         <td>${p.cantidad}</td>
+                        <td>${p.numcelular || 'N/A'}</td>
+                        <td>${p.descripcion_adicional || '---'}</td>
+                        ${fotoHtml}
                         <td>${p.estado}</td>
                         <td>
                             <select onchange="cambiarEstado(${p.id_pedido}, this.value)">
@@ -62,7 +74,7 @@ function cargarPedidos() {
                 tabla.innerHTML += fila;
             });
         } else {
-            tabla.innerHTML = '<tr><td colspan="7">No hay pedidos</td></tr>';
+            tabla.innerHTML = '<tr><td colspan="10">No hay pedidos</td></tr>';
         }
 
         // Actualizar contador de pedidos
@@ -71,6 +83,7 @@ function cargarPedidos() {
     .catch(error => {
         console.error("Error cargando pedidos:", error);
     });
+}
 }
 
 // Cambiar estado de pedido
@@ -153,6 +166,83 @@ function actualizarContadorPedidos() {
         `;
     })
     .catch(error => console.error("Error al contar pedidos:", error));
+}
+
+// Eliminar todos los pedidos
+function eliminarTodosPedidos() {
+    const confirmar = confirm("⚠️ ¿Estás SEGURO de que deseas ELIMINAR TODOS los pedidos? Esta acción es irreversible.");
+    if (!confirmar) {
+        return;
+    }
+    
+    const confirmar2 = confirm("⚠️⚠️ CONFIRMACIÓN FINAL - ¿Deseas eliminar TODOS los pedidos?");
+    if (!confirmar2) {
+        return;
+    }
+
+    fetch(`${API_URL}/pedidos/eliminar/todos`, {
+        method: "DELETE"
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert("✅ " + data.mensaje);
+            cargarPedidos();
+        } else {
+            alert("❌ Error: " + data.error);
+        }
+    })
+    .catch(error => {
+        console.error("Error eliminando todos los pedidos:", error);
+        alert("⚠️ Error de conexión");
+    });
+}
+
+// Ver foto en modal
+function verFoto(imagenBase64) {
+    // Crear modal
+    const modal = document.createElement("div");
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        cursor: pointer;
+    `;
+
+    modal.onclick = function() {
+        document.body.removeChild(modal);
+    };
+
+    // Crear container para la imagen
+    const container = document.createElement("div");
+    container.style.cssText = `
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 90vw;
+        max-height: 90vh;
+        overflow: auto;
+    `;
+
+    // Crear imagen
+    const img = document.createElement("img");
+    img.src = imagenBase64;
+    img.style.cssText = `
+        max-width: 100%;
+        max-height: 80vh;
+        border-radius: 8px;
+    `;
+
+    container.appendChild(img);
+    modal.appendChild(container);
+    document.body.appendChild(modal);
 }
 
 // Ejecutar al cargar
