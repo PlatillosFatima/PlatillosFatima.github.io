@@ -31,24 +31,25 @@ function guardarLimite() {
 }
 
 // Cargar pedidos
+// Función para cargar pedidos y mostrar imágenes en Base64
 function cargarPedidos() {
-    console.log("Cargando pedidos...");  // Asegúrate de que esto se imprima en la consola
-    fetch(`${API_URL}/pedidos`)
-    .then(res => res.json())
+    fetch("https://backend-ep0u.onrender.com/pedidos")
+    .then(response => response.json())
     .then(data => {
-        console.log(data);  // Verifica qué datos estás recibiendo
         const tabla = document.querySelector("#tablaPedidos tbody");
-        tabla.innerHTML = "";
+        tabla.innerHTML = "";  // Limpiar la tabla antes de cargar nuevos datos
 
         if (data.success && Array.isArray(data.pedidos) && data.pedidos.length > 0) {
             data.pedidos.forEach(p => {
-                let fotoHtml = '<td>';
-                if (p.imagen_casa) {
-                    fotoHtml += `<button onclick="verFoto('${p.imagen_casa}')" class="btn-ver-foto" style="background: none; border: none; cursor: pointer; font-size: 1.2rem;">📸 Ver</button>`;
+                // Generar la imagen en base64
+                let imagenHtml = '<td>';
+                if (p.imagen_casa && p.imagen_casa !== '---') {
+                    // Aquí colocamos el src correcto para la imagen en Base64
+                    imagenHtml += `<img src="${p.imagen_casa}" alt="Foto" style="width: 100px; height: auto;">`;
                 } else {
-                    fotoHtml += '---';
+                    imagenHtml += '---';
                 }
-                fotoHtml += '</td>';
+                imagenHtml += '</td>';
 
                 const fila = `
                     <tr>
@@ -59,7 +60,7 @@ function cargarPedidos() {
                         <td>${p.cantidad}</td>
                         <td>${p.numcelular || 'N/A'}</td>
                         <td>${p.descripcion_adicional || '---'}</td>
-                        ${fotoHtml}
+                        ${imagenHtml}
                         <td>${p.estado}</td>
                         <td>
                             <select onchange="cambiarEstado(${p.id_pedido}, this.value)">
@@ -78,14 +79,14 @@ function cargarPedidos() {
         } else {
             tabla.innerHTML = '<tr><td colspan="10">No hay pedidos</td></tr>';
         }
-
-        // Actualizar contador de pedidos
-        actualizarContadorPedidos();
     })
     .catch(error => {
         console.error("Error cargando pedidos:", error);
     });
 }
+
+// Llamada inicial para cargar los pedidos
+cargarPedidos();
 
 // Cambiar estado de pedido
 function cambiarEstado(idPedido, estado) {
