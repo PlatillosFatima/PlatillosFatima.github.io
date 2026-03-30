@@ -2,13 +2,24 @@ const API_URL = "https://backend-ep0u.onrender.com";
 
 // 🔥 ABRIR IMAGEN (NO DESCARGA)
 function abrirImagen(base64) {
+
+    let srcFinal = "";
+
+    // Si YA viene con data:image
+    if (base64.startsWith("data:image")) {
+        srcFinal = base64;
+    } else {
+        // Si NO, se lo agregamos
+        srcFinal = "data:image/png;base64," + base64;
+    }
+
     const nuevaVentana = window.open();
 
     nuevaVentana.document.write(`
         <html>
             <head><title>Imagen</title></head>
             <body style="margin:0; display:flex; justify-content:center; align-items:center; height:100vh; background:black;">
-                <img src="data:image/*;base64,${base64}" style="max-width:100%; max-height:100%;">
+                <img src="${srcFinal}" style="max-width:100%; max-height:100%;">
             </body>
         </html>
     `);
