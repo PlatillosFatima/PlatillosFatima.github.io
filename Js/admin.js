@@ -139,27 +139,18 @@ function actualizarContadorPedidos() {
     .then(data => {
         console.log(`Total de pedidos: ${data.total}/${data.limite}`);
 
-        let contador = document.getElementById("contador-pedidos");
-        if (!contador) {
-            contador = document.createElement("div");
-            contador.id = "contador-pedidos";
-            contador.className = "contador-pedidos";
-            const section = document.querySelector(".admin-section");
-            if (section) {
-                section.insertBefore(contador, section.firstChild);
-            }
-        }
-
+        let contador = document.getElementById("contador-pedidos-container");
+        
         let porcentaje = (data.total / data.limite) * 100;
         let color = porcentaje < 50 ? "#10b981" : porcentaje < 80 ? "#f59e0b" : "#ef4444";
 
         contador.innerHTML = `
-            <div style="margin-bottom: 15px;">
-                <p style="margin-bottom: 8px; font-weight: 600;">📊 Total de Pedidos</p>
-                <div style="background-color: #e5e7eb; border-radius: 10px; height: 25px; overflow: hidden; position: relative;">
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 12px; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                <p style="margin-bottom: 12px; font-weight: 600; font-size: 1.1rem;">📊 Total de Pedidos: ${data.total}/${data.limite}</p>
+                <div style="background-color: rgba(255,255,255,0.3); border-radius: 10px; height: 30px; overflow: hidden; position: relative;">
                     <div style="background-color: ${color}; height: 100%; width: ${porcentaje}%; transition: width 0.3s ease;"></div>
-                    <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: 600; color: #000; font-size: 0.85rem; z-index: 10;">
-                        ${data.total}/${data.limite}
+                    <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: 700; color: white; font-size: 0.95rem; z-index: 10;">
+                        ${porcentaje.toFixed(0)}%
                     </span>
                 </div>
             </div>
