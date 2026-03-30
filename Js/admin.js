@@ -50,10 +50,9 @@ function cargarPedidos() {
                         <td>
                             <select onchange="cambiarEstado(${p.id_pedido}, this.value)">
                                 <option value="">Cambiar estado</option>
-                                <option value="Pendiente">Pendiente</option>
-                                <option value="Preparado sin pagar">Preparado sin pagar</option>
-                                <option value="Preparado y pagado">Preparado y pagado</option>
-                                <option value="Pendiente de pagar">Pendiente de pagar</option>
+                                <option value="Pendiente - Por pagar">Pendiente - Por pagar</option>
+                                <option value="Preparado - Por pagar">Preparado - Por pagar</option>
+                                <option value="Preparado - Pagado">Preparado - Pagado</option>
                                 <option value="Entregado">Entregado</option>
                             </select>
                             <button onclick="confirmarEliminar(${p.id_pedido})">🗑️</button>
@@ -92,6 +91,7 @@ function cambiarEstado(idPedido, estado) {
     .then(data => {
         if (data.success) {
             alert("Estado actualizado");
+            cargarPedidos(); // Recargar la tabla después de actualizar
         } else {
             alert("Error al actualizar estado");
         }
