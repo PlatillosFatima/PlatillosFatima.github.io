@@ -43,10 +43,10 @@ function cargarPedidos() {
 
                 if (p.imagen_casa && p.imagen_casa !== '---') {
                     imagenHtml += `
-                        <button onclick="abrirImagen('${p.imagen_casa}')">
-                            📸 Ver imagen
-                        </button>
-                    `;
+                    <a href="${p.imagen_casa}" target="_blank">
+                        📷Ver imagen
+                    </a>
+                `;
                 } else {
                     imagenHtml += '---';
                 }
