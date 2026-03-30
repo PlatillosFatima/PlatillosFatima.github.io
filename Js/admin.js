@@ -64,7 +64,7 @@ function cargarPedidos() {
                 let imagenHtml = '<td>';
 
                 if (p.imagen_casa && p.imagen_casa !== '---') {
-                    const base64 = encodeURIComponent(p.imagen_casa);
+                    const base64 = p.imagen_casa;
 
                     imagenHtml += `
                         <a href="#" onclick="abrirImagen(decodeURIComponent('${base64}'))">
