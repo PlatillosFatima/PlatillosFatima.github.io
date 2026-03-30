@@ -39,7 +39,7 @@ document.getElementById("pedidoForm").addEventListener("submit", async function(
             imagen_casa: urlImagen
         };
 
-        const res = await fetch(`${API_URL}/pedido`, {
+        const res = await fetch(`${API_URL}/pedidos`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
