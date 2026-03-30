@@ -1,28 +1,8 @@
 const API_URL = "https://backend-ep0u.onrender.com";
 
-// 🔥 ABRIR IMAGEN (NO DESCARGA)
-function abrirImagen(base64) {
-
-    let srcFinal = "";
-
-    // Si YA viene con data:image
-    if (base64.startsWith("data:image")) {
-        srcFinal = base64;
-    } else {
-        // Si NO, se lo agregamos
-        srcFinal = "data:image/png;base64," + base64;
-    }
-
-    const nuevaVentana = window.open();
-
-    nuevaVentana.document.write(`
-        <html>
-            <head><title>Imagen</title></head>
-            <body style="margin:0; display:flex; justify-content:center; align-items:center; height:100vh; background:black;">
-                <img src="${srcFinal}" style="max-width:100%; max-height:100%;">
-            </body>
-        </html>
-    `);
+// 🔥 ABRIR IMAGEN (USA URL REAL)
+function abrirImagen(url) {
+    window.open(url, "_blank");
 }
 
 // 🔹 GUARDAR LIMITE
@@ -44,8 +24,6 @@ function guardarLimite() {
         if (data.success) {
             alert("Límite guardado");
             cargarPedidos();
-        } else {
-            alert("Error al guardar límite");
         }
     });
 }
@@ -64,12 +42,10 @@ function cargarPedidos() {
                 let imagenHtml = '<td>';
 
                 if (p.imagen_casa && p.imagen_casa !== '---') {
-                    const base64 = p.imagen_casa;
-
                     imagenHtml += `
-                        <a href="#" onclick="abrirImagen(decodeURIComponent('${base64}'))">
-                            Ver imagen
-                        </a>
+                        <button onclick="abrirImagen('${p.imagen_casa}')">
+                            📸 Ver imagen
+                        </button>
                     `;
                 } else {
                     imagenHtml += '---';
@@ -161,7 +137,7 @@ function eliminarTodosPedidos() {
     });
 }
 
-// 🔹 CONTADOR (DISEÑO ORIGINAL)
+// 🔹 CONTADOR
 function actualizarContadorPedidos() {
     fetch(`${API_URL}/pedidos/count`)
     .then(res => res.json())
