@@ -77,68 +77,7 @@
 
     <script src="../Js/admin.js"></script>
 
-    <script>
-        // Supongamos que el backend devuelve los pedidos en formato JSON con base64 en la columna "imagen_casa"
-        function cargarPedidos() {
-            fetch("https://backend-ep0u.onrender.com/pedidos")
-            .then(response => response.json())
-            .then(data => {
-                const tabla = document.querySelector("#tablaPedidos tbody");
-                tabla.innerHTML = "";
-
-                if (data.success && Array.isArray(data.pedidos) && data.pedidos.length > 0) {
-                    data.pedidos.forEach(p => {
-                        // Generar la imagen en base64
-                        let imagenHtml = '<td>';
-                        if (p.imagen_casa && p.imagen_casa !== '---') {
-                            imagenHtml += `<img src="data:image/png;base64,${p.imagen_casa}" alt="Foto" style="width: 100px; height: auto;">`;
-                        } else {
-                            imagenHtml += '---';
-                        }
-                        imagenHtml += '</td>';
-
-                        const fila = `
-                            <tr>
-                                <td>${p.id_pedido}</td>
-                                <td>${p.nombre}</td>
-                                <td>${p.direccion}</td>
-                                <td>${p.menu}</td>
-                                <td>${p.cantidad}</td>
-                                <td>${p.numcelular || 'N/A'}</td>
-                                <td>${p.descripcion_adicional || '---'}</td>
-                                <td>
-                                    ${p.imagen_casa 
-                                        ? `<a href="data:image/*;base64,${p.imagen_casa}" target="_blank">📸 Ver imagen</a>` 
-                                        : '---'}
-                                </td>
-                                <td>${p.estado}</td>
-                                <td>
-                                    <select onchange="cambiarEstado(${p.id_pedido}, this.value)">
-                                        <option value="">Cambiar estado</option>
-                                        <option value="Pendiente - Por pagar">Pendiente - Por pagar</option>
-                                        <option value="Preparado - Por pagar">Preparado - Por pagar</option>
-                                        <option value="Preparado - Pagado">Preparado - Pagado</option>
-                                        <option value="Entregado">Entregado</option>
-                                    </select>
-                                    <button onclick="confirmarEliminar(${p.id_pedido})">🗑️</button>
-                                </td>
-                            </tr>
-                        `;
-                        tabla.innerHTML += fila;
-                    });
-                } else {
-                    tabla.innerHTML = '<tr><td colspan="10">No hay pedidos</td></tr>';
-                }
-            })
-            .catch(error => {
-                console.error("Error cargando pedidos:", error);
-            });
-        }
-
-        // Llamada inicial para cargar los pedidos
-        cargarPedidos();
-        setInterval(cargarPedidos, 3000); // Recargar cada 3 segundos para mantener los pedidos actualizados
-    </script>
+   
 
 </body>
 </html>
