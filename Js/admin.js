@@ -32,15 +32,16 @@ function guardarLimite() {
 
 // Cargar pedidos
 function cargarPedidos() {
+    console.log("Cargando pedidos...");  // Asegúrate de que esto se imprima en la consola
     fetch(`${API_URL}/pedidos`)
     .then(res => res.json())
     .then(data => {
+        console.log(data);  // Verifica qué datos estás recibiendo
         const tabla = document.querySelector("#tablaPedidos tbody");
         tabla.innerHTML = "";
 
         if (data.success && Array.isArray(data.pedidos) && data.pedidos.length > 0) {
             data.pedidos.forEach(p => {
-                // Generar columna de foto
                 let fotoHtml = '<td>';
                 if (p.imagen_casa) {
                     fotoHtml += `<button onclick="verFoto('${p.imagen_casa}')" class="btn-ver-foto" style="background: none; border: none; cursor: pointer; font-size: 1.2rem;">📸 Ver</button>`;
@@ -123,7 +124,7 @@ function confirmarEliminar(idPedido) {
         .then(data => {
             if (data.success) {
                 alert("Pedido eliminado");
-                cargarPedidos();
+                cargarPedidos();  // Recarga los pedidos
             } else {
                 alert("Error al eliminar pedido");
             }
@@ -161,32 +162,32 @@ function actualizarContadorPedidos() {
 
 // Eliminar todos los pedidos
 function eliminarTodosPedidos() {
-    const confirmar = confirm("⚠️ ¿Estás SEGURO de que deseas ELIMINAR TODOS los pedidos? Esta acción es irreversible.");
-    if (!confirmar) {
-        return;
-    }
-    
-    const confirmar2 = confirm("⚠️⚠️ CONFIRMACIÓN FINAL - ¿Deseas eliminar TODOS los pedidos?");
-    if (!confirmar2) {
-        return;
-    }
+   const confirmar = confirm("⚠️ ¿Estás SEGURO de que deseas ELIMINAR TODOS los pedidos? Esta acción es irreversible.");
+   if (!confirmar) {
+       return;
+   }
 
-    fetch(`${API_URL}/pedidos/eliminar/todos`, {
-        method: "DELETE"
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            alert("✅ " + data.mensaje);
-            cargarPedidos();
-        } else {
-            alert("❌ Error: " + data.error);
-        }
-    })
-    .catch(error => {
-        console.error("Error eliminando todos los pedidos:", error);
-        alert("⚠️ Error de conexión");
-    });
+   const confirmar2 = confirm("⚠️⚠️ CONFIRMACIÓN FINAL - ¿Deseas eliminar TODOS los pedidos?");
+   if (!confirmar2) {
+       return;
+   }
+
+   fetch(`${API_URL}/pedidos/eliminar/todos`, {
+       method: "DELETE"
+   })
+   .then(res => res.json())
+   .then(data => {
+       if (data.success) {
+           alert("✅ " + data.mensaje);
+           cargarPedidos();  // Recarga los pedidos
+       } else {
+           alert("❌ Error: " + data.error);
+       }
+   })
+   .catch(error => {
+       console.error("Error eliminando todos los pedidos:", error);
+       alert("⚠️ Error de conexión");
+   });
 }
 
 // Ver foto en modal
