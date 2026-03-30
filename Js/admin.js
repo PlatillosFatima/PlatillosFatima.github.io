@@ -66,10 +66,10 @@ function cargarPedidos() {
                         <td>
                             <select onchange="cambiarEstado(${p.id_pedido}, this.value)">
                                 <option value="">Cambiar estado</option>
-                                <option value="Pendiente - Por pagar">Pendiente - Por pagar</option>
-                                <option value="Preparado - Por pagar">Preparado - Por pagar</option>
-                                <option value="Preparado - Pagado">Preparado - Pagado</option>
-                                <option value="Entregado">Entregado</option>
+                                <option value="Pendiente - Por pagar">Pendiente</option>
+                                <option value="Preparado - Por pagar">Pagado</option>
+                                <option value="Preparado - Pagado">Entregado</option>
+                                <option value="Entregado">~~~~~</option>
                             </select>
                             <button onclick="confirmarEliminar(${p.id_pedido})">🗑️</button>
                         </td>
