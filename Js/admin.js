@@ -44,12 +44,11 @@ function cargarPedidos() {
                 // Generar el enlace para abrir la imagen en otra pestaña
                 let imagenHtml = '<td>';
                 if (p.imagen_casa && p.imagen_casa !== '---') {
-                    // Crear un enlace que abre la imagen en otra pestaña
                     imagenHtml += `<a href="${p.imagen_casa}" target="_blank" class="btn-ver-foto" style="font-size: 1.2rem;">📸 Ver</a>`;
                 } else {
                     imagenHtml += '---';
                 }
-                imagenHtml += '</td>';
+imagenHtml += '</td>';
 
                 const fila = `
                     <tr>
@@ -87,7 +86,7 @@ function cargarPedidos() {
 
 // Llamada inicial para cargar los pedidos
 cargarPedidos();
-setInterval(cargarPedidos, 15000); // Recargar cada 15 segundos para mantener los pedidos actualizados
+setInterval(cargarPedidos, 5000); // Recargar cada 15 segundos para mantener los pedidos actualizados
 
 // Cambiar estado de pedido
 function cambiarEstado(idPedido, estado) {
@@ -135,9 +134,8 @@ function confirmarEliminar(idPedido) {
     }
 }
 
-// Actualizar contador de pedidos
 function actualizarContadorPedidos() {
-    fetch(`${API_URL}/pedidos/count`)
+    fetch("https://backend-ep0u.onrender.com/pedidos/count")
     .then(res => res.json())
     .then(data => {
         console.log(`Total de pedidos: ${data.total}/${data.limite}`);
@@ -159,8 +157,13 @@ function actualizarContadorPedidos() {
             </div>
         `;
     })
-    .catch(error => console.error("Error al contar pedidos:", error));
+    .catch(error => {
+        console.error("Error al contar pedidos:", error);
+    });
 }
+
+// Llamada para actualizar el contador de pedidos y el límite
+actualizarContadorPedidos();
 
 // Eliminar todos los pedidos
 function eliminarTodosPedidos() {
