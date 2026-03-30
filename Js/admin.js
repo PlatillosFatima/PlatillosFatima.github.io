@@ -41,11 +41,11 @@ function cargarPedidos() {
 
         if (data.success && Array.isArray(data.pedidos) && data.pedidos.length > 0) {
             data.pedidos.forEach(p => {
-                // Generar la imagen en base64
+                // Generar el enlace para abrir la imagen en otra pestaña
                 let imagenHtml = '<td>';
                 if (p.imagen_casa && p.imagen_casa !== '---') {
-                    // Aquí colocamos el src correcto para la imagen en Base64
-                    imagenHtml += `<img src="${p.imagen_casa}" alt="Foto" style="width: 100px; height: auto;">`;
+                    // Crear un enlace que abre la imagen en otra pestaña
+                    imagenHtml += `<a href="${p.imagen_casa}" target="_blank" class="btn-ver-foto" style="font-size: 1.2rem;">📸 Ver</a>`;
                 } else {
                     imagenHtml += '---';
                 }
@@ -87,6 +87,7 @@ function cargarPedidos() {
 
 // Llamada inicial para cargar los pedidos
 cargarPedidos();
+setInterval(cargarPedidos, 15000); // Recargar cada 15 segundos para mantener los pedidos actualizados
 
 // Cambiar estado de pedido
 function cambiarEstado(idPedido, estado) {
