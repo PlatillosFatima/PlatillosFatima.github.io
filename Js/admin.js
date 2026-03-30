@@ -41,9 +41,7 @@ function cargarPedidos() {
 
         if (data.success && Array.isArray(data.pedidos) && data.pedidos.length > 0) {
             data.pedidos.forEach(p => {
-                // Agregar consola para verificar la imagen en base64
-                console.log("Imagen Base64 de este pedido: ", p.imagen_casa);
-
+                // Generar la imagen en base64
                 let imagenHtml = '<td>';
                 if (p.imagen_casa && p.imagen_casa !== '---') {
                     // Aquí colocamos el src correcto para la imagen en Base64
@@ -86,6 +84,9 @@ function cargarPedidos() {
         console.error("Error cargando pedidos:", error);
     });
 }
+
+// Llamada inicial para cargar los pedidos
+cargarPedidos();
 
 // Cambiar estado de pedido
 function cambiarEstado(idPedido, estado) {
