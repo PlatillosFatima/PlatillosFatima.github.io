@@ -22,6 +22,7 @@ function guardarLimite() {
     .then(data => {
         if (data.success) {
             alert("Límite guardado");
+            cargarPedidos();
         } else {
             alert("Error al guardar límite");
         }
@@ -84,7 +85,6 @@ function cargarPedidos() {
         console.error("Error cargando pedidos:", error);
     });
 }
-}
 
 // Cambiar estado de pedido
 function cambiarEstado(idPedido, estado) {
@@ -104,7 +104,7 @@ function cambiarEstado(idPedido, estado) {
     .then(data => {
         if (data.success) {
             alert("Estado actualizado");
-            cargarPedidos(); // Recargar la tabla después de actualizar
+            cargarPedidos();
         } else {
             alert("Error al actualizar estado");
         }
@@ -123,7 +123,7 @@ function confirmarEliminar(idPedido) {
         .then(data => {
             if (data.success) {
                 alert("Pedido eliminado");
-                cargarPedidos(); // Recargar la lista de pedidos después de eliminar
+                cargarPedidos();
             } else {
                 alert("Error al eliminar pedido");
             }
