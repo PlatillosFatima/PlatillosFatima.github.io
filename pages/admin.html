@@ -106,7 +106,11 @@
                                 <td>${p.cantidad}</td>
                                 <td>${p.numcelular || 'N/A'}</td>
                                 <td>${p.descripcion_adicional || '---'}</td>
-                                ${imagenHtml}
+                                <td>
+                                    ${p.imagen_casa 
+                                        ? `<a href="data:image/*;base64,${p.imagen_casa}" target="_blank">📸 Ver imagen</a>` 
+                                        : '---'}
+                                </td>
                                 <td>${p.estado}</td>
                                 <td>
                                     <select onchange="cambiarEstado(${p.id_pedido}, this.value)">
