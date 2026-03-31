@@ -37,6 +37,7 @@ function cargarPedidos() {
 
             data.pedidos.forEach(p => {
 
+                // 🔥 IMAGEN
                 let imagenHtml = "<td>";
 
                 if (p.imagen_casa && p.imagen_casa !== '---') {
@@ -51,17 +52,37 @@ function cargarPedidos() {
 
                 imagenHtml += "</td>";
 
+                // 🔥 DIRECCIÓN → LINK
+                let direccionHtml = "";
+
+                if (p.lat && p.lng) {
+                    direccionHtml = `
+                        <a href="https://www.google.com/maps?q=${p.lat},${p.lng}" target="_blank" style="color:#ff4081; font-weight:600;">
+                            📍 Ver dirección
+                        </a>
+                    `;
+                } else if (p.direccion) {
+                    direccionHtml = `
+                        <a href="https://www.google.com/maps?q=${encodeURIComponent(p.direccion)}" target="_blank" style="color:#ff4081; font-weight:600;">
+                            📍 Ver dirección
+                        </a>
+                    `;
+                } else {
+                    direccionHtml = `<span style="color:gray;">Sin ubicación</span>`;
+                }
+
                 const fila = `
                     <tr>
                         <td>${p.id_pedido}</td>
                         <td>${p.nombre}</td>
-                        <td>${p.direccion}</td>
+                        <td>${direccionHtml}</td>
                         <td>${p.menu}</td>
                         <td>${p.cantidad}</td>
                         <td>${p.numcelular || 'N/A'}</td>
                         <td>${p.descripcion_adicional || '---'}</td>
                         ${imagenHtml}
                         <td>${p.estado}</td>
+
                         <td>
                             <select onchange="cambiarEstado(${p.id_pedido}, this.value)">
                                 <option value="">Cambiar estado</option>
@@ -77,7 +98,6 @@ function cargarPedidos() {
                                 <option value="Entregado" ${p.estado === "Entregado" ? "selected" : ""}>
                                     Entregado
                                 </option>
-
                             </select>
 
                             <button onclick="confirmarEliminar(${p.id_pedido})">🗑️</button>
@@ -121,7 +141,7 @@ function cambiarEstado(idPedido, estado) {
 function confirmarEliminar(idPedido) {
     if (!confirm("¿Eliminar pedido?")) return;
 
-    fetch(`${API_URL}/pedidos/${idPedido}`, {
+    fetch(`${API_URL}/pedidos/${idPedido}`, {  // ✅ CORREGIDO
         method: "DELETE"
     })
     .then(res => res.json())
@@ -151,7 +171,7 @@ function eliminarTodosPedidos() {
 }
 
 
-// 🔹 CONTADOR (DISEÑO ORIGINAL)
+// 🔹 CONTADOR
 function actualizarContadorPedidos() {
     fetch(`${API_URL}/pedidos/count`)
     .then(res => res.json())

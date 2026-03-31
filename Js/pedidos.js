@@ -1,5 +1,93 @@
 const API_URL = "https://backend-ep0u.onrender.com";
 
+let map;
+let marker;
+
+// 🔹 ABRIR MAPA
+async function abrirMapa() {
+    document.getElementById("modalMapa").style.display = "flex";
+
+    let lat = 27.2446;
+    let lng = -100.1329;
+
+    const direccionInput = document.getElementById("direccion").value;
+
+    // 🔥 SI EL USUARIO ESCRIBIÓ DIRECCIÓN → CONVERTIR A COORDENADAS
+    if (direccionInput.trim() !== "") {
+        try {
+            const res = await fetch(
+                `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(direccionInput)}`
+            );
+
+            const data = await res.json();
+
+            if (data && data.length > 0) {
+                lat = parseFloat(data[0].lat);
+                lng = parseFloat(data[0].lon);
+            }
+
+        } catch (error) {
+            console.log("Error buscando dirección");
+        }
+    }
+
+    setTimeout(() => {
+
+        if (!map) {
+            map = L.map('map').setView([lat, lng], 14);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
+
+            marker = L.marker([lat, lng], {
+                draggable: true
+            }).addTo(map);
+
+            map.on('click', function(e) {
+                marker.setLatLng(e.latlng);
+            });
+
+        } else {
+            map.setView([lat, lng], 14);
+            marker.setLatLng([lat, lng]);
+            map.invalidateSize();
+        }
+
+    }, 300);
+}
+
+// 🔹 CERRAR MAPA
+function cerrarMapa() {
+    document.getElementById("modalMapa").style.display = "none";
+}
+
+// 🔹 CONFIRMAR UBICACIÓN
+async function confirmarUbicacion() {
+    const pos = marker.getLatLng();
+
+    try {
+        const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.lat}&lon=${pos.lng}`
+        );
+
+        const data = await res.json();
+
+        if (data && data.display_name) {
+            document.getElementById("direccion").value = data.display_name;
+        } else {
+            alert("No se pudo obtener dirección");
+        }
+
+    } catch (error) {
+        alert("Error obteniendo dirección");
+    }
+
+    cerrarMapa();
+}
+
+
+// 🔹 ENVÍO FORM
 document.getElementById("pedidoForm").addEventListener("submit", async function(e) {
     e.preventDefault();
 
@@ -9,7 +97,8 @@ document.getElementById("pedidoForm").addEventListener("submit", async function(
     let urlImagen = null;
 
     try {
-        // 🔹 1. SUBIR IMAGEN SI EXISTE
+
+        // 🔹 SUBIR IMAGEN
         if (file) {
             const formData = new FormData();
             formData.append("imagen", file);
@@ -21,17 +110,27 @@ document.getElementById("pedidoForm").addEventListener("submit", async function(
 
             const dataImagen = await resImagen.json();
 
-            if (!dataImagen.success) {
-                throw new Error("Error subiendo imagen");
-            }
+            if (!dataImagen.success) throw new Error("Error subiendo imagen");
 
             urlImagen = dataImagen.url;
         }
 
-        // 🔹 2. ENVIAR PEDIDO
+        // 🔥 COORDENADAS
+        let lat = null;
+        let lng = null;
+
+        if (marker) {
+            const pos = marker.getLatLng();
+            lat = pos.lat;
+            lng = pos.lng;
+        }
+
+        // 🔹 DATOS
         const datos = {
             nombre: document.getElementById("nombre").value,
             direccion: document.getElementById("direccion").value,
+            lat: lat,
+            lng: lng,
             menu: document.getElementById("menu").value,
             cantidad: document.getElementById("cantidad").value,
             numcelular: document.getElementById("numcelular").value,
@@ -41,9 +140,7 @@ document.getElementById("pedidoForm").addEventListener("submit", async function(
 
         const res = await fetch(`${API_URL}/pedidos`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(datos)
         });
 
@@ -51,15 +148,12 @@ document.getElementById("pedidoForm").addEventListener("submit", async function(
 
         if (data.success) {
             mensajeElement.innerText = "✓ Pedido enviado";
-            mensajeElement.className = "mensaje success";
             document.getElementById("pedidoForm").reset();
         } else {
-            throw new Error(data.error || "Error");
+            throw new Error(data.error);
         }
 
     } catch (error) {
-        console.error(error);
         mensajeElement.innerText = "❌ " + error.message;
-        mensajeElement.className = "mensaje error";
     }
 });
