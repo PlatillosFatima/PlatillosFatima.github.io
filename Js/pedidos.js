@@ -12,7 +12,6 @@ async function abrirMapa() {
 
     const direccionInput = document.getElementById("direccion").value;
 
-    // 🔥 SI EL USUARIO ESCRIBIÓ DIRECCIÓN → CONVERTIR A COORDENADAS
     if (direccionInput.trim() !== "") {
         try {
             const res = await fetch(
@@ -92,11 +91,18 @@ document.getElementById("pedidoForm").addEventListener("submit", async function(
     e.preventDefault();
 
     const mensajeElement = document.getElementById("mensaje");
+    const boton = document.querySelector(".btn-submit");
     const file = document.getElementById("imagen_casa").files[0];
 
     let urlImagen = null;
 
     try {
+
+        // 🔥 DESACTIVAR BOTÓN
+        boton.disabled = true;
+
+        mensajeElement.innerText = "";
+        mensajeElement.className = "mensaje";
 
         // 🔹 SUBIR IMAGEN
         if (file) {
@@ -115,7 +121,7 @@ document.getElementById("pedidoForm").addEventListener("submit", async function(
             urlImagen = dataImagen.url;
         }
 
-        // 🔥 COORDENADAS
+        // 🔹 COORDENADAS
         let lat = null;
         let lng = null;
 
@@ -146,14 +152,21 @@ document.getElementById("pedidoForm").addEventListener("submit", async function(
 
         const data = await res.json();
 
-        if (data.success) {
+        if (res.ok && data.success) {
             mensajeElement.innerText = "✓ Pedido enviado";
+            mensajeElement.className = "mensaje success";
             document.getElementById("pedidoForm").reset();
+
         } else {
-            throw new Error(data.error);
+            mensajeElement.innerText = "❌ " + (data.error || "Límite alcanzado");
+            mensajeElement.className = "mensaje error";
         }
 
     } catch (error) {
-        mensajeElement.innerText = "❌ " + error.message;
+        mensajeElement.innerText = "❌ Error al enviar pedido";
+        mensajeElement.className = "mensaje error";
+        console.error(error);
+    } finally {
+        boton.disabled = false;
     }
 });
