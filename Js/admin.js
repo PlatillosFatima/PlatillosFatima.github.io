@@ -39,7 +39,6 @@ function cargarPedidos() {
 
                 let imagenHtml = "<td>";
 
-                // 🔥 SOLO USA URL
                 if (p.imagen_casa && p.imagen_casa !== '---') {
                     imagenHtml += `
                         <a href="${p.imagen_casa}" target="_blank">
@@ -66,11 +65,21 @@ function cargarPedidos() {
                         <td>
                             <select onchange="cambiarEstado(${p.id_pedido}, this.value)">
                                 <option value="">Cambiar estado</option>
-                                <option value="Pendiente - Por pagar">Pendiente</option>
-                                <option value="Preparado - Por pagar">Pagado</option>
-                                <option value="Preparado - Pagado">Entregado</option>
-                                <option value="Entregado">~~~~~</option>
+
+                                <option value="Pendiente" ${p.estado === "Pendiente" ? "selected" : ""}>
+                                    Pendiente
+                                </option>
+
+                                <option value="Pagado" ${p.estado === "Pagado" ? "selected" : ""}>
+                                    Pagado
+                                </option>
+
+                                <option value="Entregado" ${p.estado === "Entregado" ? "selected" : ""}>
+                                    Entregado
+                                </option>
+
                             </select>
+
                             <button onclick="confirmarEliminar(${p.id_pedido})">🗑️</button>
                         </td>
                     </tr>
